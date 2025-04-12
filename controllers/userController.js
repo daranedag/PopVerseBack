@@ -34,6 +34,7 @@ export const updateUser = async (req, res) => {
     const { name, email } = req.body;
 
     try {
+        const db = await connectDb();
         if (isTest) {
             await db.run(
                 'UPDATE users SET name = ?, email = ? WHERE id = ?',
@@ -58,6 +59,7 @@ export const deleteUser = async (req, res) => {
     const userId = req.params.id;
 
     try {
+        const db = await connectDb();
         if (isTest) {
             await db.run('DELETE FROM users WHERE id = ?', [userId]);
         } else {
