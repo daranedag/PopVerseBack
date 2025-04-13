@@ -52,14 +52,25 @@ export const createOrder = async (req, res) => {
         db = await connectDb();
         if (isTest) {
             await db.run(
-                'INSERT INTO orders (user_id, product_ids, total_price, status) VALUES (?, ?, ?, ?)',
+                'INSERT INTO orders (user_id, total_price, status) VALUES (?, ?, ?)',
                 [user_id, JSON.stringify(product_ids), total_price, status]
             );
         } else {
-            await db.query(
-                'INSERT INTO orders (user_id, product_ids, total_price, status) VALUES ($1, $2, $3, $4)',
-                [user_id, JSON.stringify(product_ids), total_price, status]
+            const result = await db.query(
+                'INSERT INTO orders (user_id, total, status) VALUES ($1, $2, $3) RETURNING id',
+                [user_id, total_price, status]
             );
+            const orderId = result.rows[0].id;
+
+            // Insertar en order_details
+            for (const product of product_ids) {
+                const { product_id, quantity, price, discount = 0 } = product;
+                const subtotal = quantity * price * (1 - discount / 100);
+                await db.query(
+                    'INSERT INTO order_details (order_id, product_id, quantity, subtotal) VALUES ($1, $2, $3, $4)',
+                    [orderId, product_id, quantity, subtotal]
+                );
+            }
         }
     
         res.status(201).json({ message: 'Orden creada' });
