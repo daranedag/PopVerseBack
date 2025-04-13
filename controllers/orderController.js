@@ -26,19 +26,19 @@ export const getOrder = async (req, res) => {
     const orderId = req.params.id;
     try {
         db = await connectDb();
-        let order;
+        let orderDetails;
         if (isTest) {
-            order = await db.get('SELECT * FROM orders WHERE id = ?', [orderId]);
+            order = await db.get('SELECT * FROM order_details WHERE order_id = ?', [orderId]);
         } else {
-            const result = await db.query('SELECT * FROM orders WHERE id = $1', [orderId]);
-            order = result.rows[0];
+            const result = await db.query('SELECT * FROM order_details WHERE order_id = $1', [orderId]);
+            orderDetails = result.rows
         }
 
-        if (!order) {
-            return res.status(404).json({ message: 'Orden no encontrada' });
+        if (!orderDetails || orderDetails.length === 0) {
+            return res.status(404).json({ message: 'Detalles de la orden no encontrados' });
         }
 
-        res.status(200).json(order);
+        res.status(200).json(orderDetails);
     } catch (error) {
         console.error('Error al obtener orden:', error);
         res.status(500).json({ message: 'Error del servidor' });
