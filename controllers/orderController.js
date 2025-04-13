@@ -24,8 +24,8 @@ export const getOrders = async (req, res) => {
 // Obtener una orden por ID
 export const getOrder = async (req, res) => {
     const orderId = req.params.id;
-
     try {
+        db = await connectDb();
         let order;
         if (isTest) {
             order = await db.get('SELECT * FROM orders WHERE id = ?', [orderId]);
@@ -49,6 +49,7 @@ export const createOrder = async (req, res) => {
     const { user_id, product_ids, total_price, status } = req.body;
   
     try {
+        db = await connectDb();
         if (isTest) {
             await db.run(
                 'INSERT INTO orders (user_id, product_ids, total_price, status) VALUES (?, ?, ?, ?)',
@@ -74,6 +75,7 @@ export const updateOrder = async (req, res) => {
     const { product_ids, total_price, status } = req.body;
   
     try {
+        db = await connectDb();
         if (isTest) {
             await db.run(
                 'UPDATE orders SET product_ids = ?, total_price = ?, status = ? WHERE id = ?',
