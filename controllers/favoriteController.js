@@ -12,7 +12,7 @@ export const getFavorites = async (req, res) => {
         if (isTest) {
             favorites = await db.all('SELECT * FROM favorites WHERE user_id = ?', [userId]);
         } else {
-            const result = await db.query('SELECT * FROM favorites WHERE user_id = $1', [userId]);
+            const result = await db.query('SELECT * FROM products WHERE id in (SELECT product_id from favorites where user_id = $1)', [userId]);
             favorites = result.rows;
         }
 
