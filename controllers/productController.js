@@ -53,9 +53,9 @@ export const getProductExtra = async (req, res) => {
         db = await connectDb();
         let extra;
         if (isTest) {
-            extra = await db.get('SELECT * FROM extras WHERE id = ?', [productId]);
+            extra = await db.get('SELECT * FROM extras WHERE product_id = ?', [productId]);
         } else {
-            const result = await db.query('SELECT * FROM extras WHERE id = $1', [productId]);
+            const result = await db.query('SELECT * FROM extras WHERE product_id = $1', [productId]);
             extra = result.rows[0];
         }
 
