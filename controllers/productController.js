@@ -63,7 +63,7 @@ export const getProductExtra = async (req, res) => {
             return res.status(404).json({ message: 'Extra no encontrado' });
         }
 
-        res.status(200).json(product);
+        res.status(200).json(extra);
     } catch (error) {
         console.error('Error al obtener extra:', error);
         res.status(500).json({ message: 'Error del servidor' });
