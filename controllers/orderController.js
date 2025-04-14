@@ -28,9 +28,9 @@ export const getOrder = async (req, res) => {
         db = await connectDb();
         let orderDetails;
         if (isTest) {
-            order = await db.get('select od.*, p.name from order_details od join products p on od.product_id=p.id where od.order_id= ?', [orderId]);
+            order = await db.get('select od.*, p.name, p.price, p.discount from order_details od join products p on od.product_id=p.id where od.order_id= ?', [orderId]);
         } else {
-            const result = await db.query('select od.*, p.name from order_details od join products p on od.product_id=p.id where od.order_id= $1', [orderId]);
+            const result = await db.query('select od.*, p.name, p.price, p.discount from order_details od join products p on od.product_id=p.id where od.order_id= $1', [orderId]);
             orderDetails = result.rows
         }
 
