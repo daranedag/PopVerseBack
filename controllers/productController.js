@@ -26,6 +26,7 @@ export const getProduct = async (req, res) => {
     const productId = req.params.id;
 
     try {
+        db = await connectDb();
         let product;
         if (isTest) {
             product = await db.get('SELECT * FROM products WHERE id = ?', [productId]);
@@ -49,6 +50,7 @@ export const getProductExtra = async (req, res) => {
     const productId = req.params.id;
 
     try {
+        db = await connectDb();
         let extra;
         if (isTest) {
             extra = await db.get('SELECT * FROM extra WHERE id = ?', [productId]);
@@ -73,6 +75,7 @@ export const createProduct = async (req, res) => {
     const { name, description, price } = req.body;
 
     try {
+        db = await connectDb();
         if (isTest) {
             await db.run(
                 'INSERT INTO products (name, description, price) VALUES (?, ?, ?)',
@@ -98,6 +101,7 @@ export const updateProduct = async (req, res) => {
     const { name, description, price } = req.body;
 
     try {
+        db = await connectDb();
         if (isTest) {
             await db.run(
                 'UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?',
@@ -122,6 +126,7 @@ export const deleteProduct = async (req, res) => {
     const productId = req.params.id;
 
     try {
+        db = await connectDb();
         if (isTest) {
             await db.run('DELETE FROM products WHERE id = ?', [productId]);
         } else {
