@@ -85,6 +85,14 @@ CREATE TABLE favorites (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+-- Tabla de Extras (Imagenes extras para el producto)
+CREATE TABLE extras (
+    id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url TEXT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
 -- USERS
 INSERT INTO users (name, email, password, role) VALUES
 ('Juan Pérez', 'juan@example.com', 'hashedpassword1', 'user'),

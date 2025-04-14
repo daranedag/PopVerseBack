@@ -45,6 +45,29 @@ export const getProduct = async (req, res) => {
     }
 };
 
+export const getProductExtra = async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        let extra;
+        if (isTest) {
+            extra = await db.get('SELECT * FROM extra WHERE id = ?', [productId]);
+        } else {
+            const result = await db.query('SELECT * FROM extra WHERE id = $1', [productId]);
+            extra = result.rows[0];
+        }
+
+        if (!extra) {
+            return res.status(404).json({ message: 'Extra no encontrado' });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error('Error al obtener extra:', error);
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+};
+
 // Crear un nuevo producto
 export const createProduct = async (req, res) => {
     const { name, description, price } = req.body;
