@@ -99,9 +99,9 @@ export const profile = async (req, res) => {
         let user;
 
         if (isTest) {
-            user = await db.get('SELECT id, name, email FROM users WHERE id = ?', [userId]);
+            user = await db.get('SELECT id, name, email, role FROM users WHERE id = ?', [userId]);
         } else {
-            const result = await db.query('SELECT id, name, email FROM users WHERE id = $1', [userId]);
+            const result = await db.query('SELECT id, name, email, role FROM users WHERE id = $1', [userId]);
             user = result.rows[0];
         }
 
